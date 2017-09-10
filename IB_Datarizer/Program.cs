@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace IB_Datarizer
 {
@@ -7,6 +8,9 @@ namespace IB_Datarizer
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
+
+            Thread.Sleep(1000);
         }
+        
     }
 }

@@ -24,7 +24,7 @@ namespace IB_Datarizer
         public void AddListBoxItem(string text)
         {
             // See if a new invocation is required form a different thread
-            if (this.lstData.InvokeRequired)
+            if (this.lstRealTimeData.InvokeRequired)
             {
                 SetTextCallback d = new SetTextCallback(AddListBoxItem);
                 this.Invoke(d, new object[] { text });
@@ -32,7 +32,7 @@ namespace IB_Datarizer
             else
             {
                 // Add the text string to the list box
-                this.lstData.Items.Add(text);
+                this.lstRealTimeData.Items.Add(text);
             }
         }
 
@@ -123,6 +123,55 @@ namespace IB_Datarizer
         public void SetServerTime(string serverTime)
         {
             tslServerTime.Text = serverTime;
+        }
+
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnGetHistoricalData_Click(object sender, EventArgs e)
+        {
+            // First clear out the list box
+            lstHistoricalData.Items.Clear();
+
+            // Create a new contract object
+            IBApi.Contract contract = new IBApi.Contract();
+
+            // Create a new TagValueList object (for API version 9.71)
+            List<IBApi.TagValue> mktDataOptions = new List<IBApi.TagValue>();
+
+            // Now fill the ContractInfo object with the necessary information 
+            // Contract identifier
+            contract.ConId = 0;
+            // Stock symbol
+            contract.Symbol = txtSymbol.Text;
+            // Type of instrument: Stock=STK,Option=OPT,Future=FUT, etc.
+            contract.SecType = "STK";
+            // The destination of order or request. "SMART" =IB order router
+            contract.Exchange = txtExchange.Text;
+            // The primary exchange where the instrument trades. 
+            // NYSE, NASDAQ, AMEX, BATS, ARCA, PHLX etc.
+            contract.PrimaryExch = "NASDAQ";
+            // The currency of the exchange USD or GBP or CAD or EUR, etc.
+            contract.Currency = "USD";
+            // Now call reqHistoricalDataEx with parameters:
+            // tickerId, Contract, endDateTime, durationStr, barSize, WhatToShow, 
+            // useRTH, formatDate
+            ibClient.ClientSocket.reqHistoricalData(1, contract,
+                 dtpEndDateTime.Value.ToString("yyyyMMdd HH:mm:ss" ),
+                 txtDuration.Text,
+                 txtBars.Text,
+                 "TRADES", 1,1, true, mktDataOptions);
+
+            // For API Version 9.71, add the TagValueList object  
+            // named ChartOptions to the last parameter on the call to 
+            // reqHistoricalDataEx
         }
     }
 }

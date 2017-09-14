@@ -43,12 +43,14 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.txtBars = new System.Windows.Forms.TextBox();
-            this.txtDuration = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.txtExchange = new System.Windows.Forms.TextBox();
+            this.cboDurationPeriod = new System.Windows.Forms.ComboBox();
+            this.numDurationNumber = new System.Windows.Forms.NumericUpDown();
+            this.cboHistoricBarSize = new System.Windows.Forms.ComboBox();
             this.tlsFooter.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numDurationNumber)).BeginInit();
             this.SuspendLayout();
             // 
             // btnConnect
@@ -97,10 +99,12 @@
             this.txtSymbol.Name = "txtSymbol";
             this.txtSymbol.Size = new System.Drawing.Size(100, 20);
             this.txtSymbol.TabIndex = 4;
-            this.txtSymbol.Text = "MSFT";
+            this.txtSymbol.Text = "ES";
             // 
             // lstRealTimeData
             // 
+            this.lstRealTimeData.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.lstRealTimeData.FormattingEnabled = true;
             this.lstRealTimeData.Location = new System.Drawing.Point(13, 70);
             this.lstRealTimeData.Name = "lstRealTimeData";
@@ -132,10 +136,13 @@
             // 
             // lstHistoricalData
             // 
+            this.lstHistoricalData.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lstHistoricalData.FormattingEnabled = true;
             this.lstHistoricalData.Location = new System.Drawing.Point(404, 70);
             this.lstHistoricalData.Name = "lstHistoricalData";
-            this.lstHistoricalData.Size = new System.Drawing.Size(381, 186);
+            this.lstHistoricalData.Size = new System.Drawing.Size(560, 186);
             this.lstHistoricalData.TabIndex = 7;
             // 
             // btnGetHistoricalData
@@ -169,7 +176,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(485, 46);
+            this.label2.Location = new System.Drawing.Point(429, 45);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(31, 13);
             this.label2.TabIndex = 11;
@@ -183,22 +190,6 @@
             this.label3.Size = new System.Drawing.Size(50, 13);
             this.label3.TabIndex = 12;
             this.label3.Text = "Duration:";
-            // 
-            // txtBars
-            // 
-            this.txtBars.Location = new System.Drawing.Point(523, 42);
-            this.txtBars.Name = "txtBars";
-            this.txtBars.Size = new System.Drawing.Size(65, 20);
-            this.txtBars.TabIndex = 13;
-            this.txtBars.Text = "1 Day";
-            // 
-            // txtDuration
-            // 
-            this.txtDuration.Location = new System.Drawing.Point(650, 42);
-            this.txtDuration.Name = "txtDuration";
-            this.txtDuration.Size = new System.Drawing.Size(65, 20);
-            this.txtDuration.TabIndex = 14;
-            this.txtDuration.Text = "1 M";
             // 
             // label4
             // 
@@ -224,18 +215,83 @@
             this.txtExchange.Name = "txtExchange";
             this.txtExchange.Size = new System.Drawing.Size(100, 20);
             this.txtExchange.TabIndex = 17;
-            this.txtExchange.Text = "SMART";
+            this.txtExchange.Text = "GLOBEX";
+            // 
+            // cboDurationPeriod
+            // 
+            this.cboDurationPeriod.FormattingEnabled = true;
+            this.cboDurationPeriod.Items.AddRange(new object[] {
+            "S",
+            "D",
+            "W",
+            "M",
+            "Y"});
+            this.cboDurationPeriod.Location = new System.Drawing.Point(735, 43);
+            this.cboDurationPeriod.Name = "cboDurationPeriod";
+            this.cboDurationPeriod.Size = new System.Drawing.Size(34, 21);
+            this.cboDurationPeriod.TabIndex = 18;
+            this.cboDurationPeriod.Text = "D";
+            // 
+            // numDurationNumber
+            // 
+            this.numDurationNumber.Location = new System.Drawing.Point(650, 44);
+            this.numDurationNumber.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.numDurationNumber.Name = "numDurationNumber";
+            this.numDurationNumber.Size = new System.Drawing.Size(79, 20);
+            this.numDurationNumber.TabIndex = 19;
+            this.numDurationNumber.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // cboHistoricBarSize
+            // 
+            this.cboHistoricBarSize.FormattingEnabled = true;
+            this.cboHistoricBarSize.Items.AddRange(new object[] {
+            "1 Secs",
+            "5 Secs",
+            "10 Secs",
+            "15 Secs",
+            "30 Secs",
+            "1 Min",
+            "2 Mins",
+            "3 Mins",
+            "5 Mins",
+            "10 Mins",
+            "15 Mins",
+            "20 Mins",
+            "30 Mins",
+            "1 Hour",
+            "2 Hours",
+            "3 Hours",
+            "4 Hours",
+            "8 Hours",
+            "1 Day",
+            "1 W",
+            "1 M"});
+            this.cboHistoricBarSize.Location = new System.Drawing.Point(466, 43);
+            this.cboHistoricBarSize.Name = "cboHistoricBarSize";
+            this.cboHistoricBarSize.Size = new System.Drawing.Size(55, 21);
+            this.cboHistoricBarSize.TabIndex = 21;
+            this.cboHistoricBarSize.Text = "1 Min";
+            this.cboHistoricBarSize.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(976, 284);
+            this.Controls.Add(this.cboHistoricBarSize);
+            this.Controls.Add(this.numDurationNumber);
+            this.Controls.Add(this.cboDurationPeriod);
             this.Controls.Add(this.txtExchange);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.txtDuration);
-            this.Controls.Add(this.txtBars);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -254,6 +310,7 @@
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.tlsFooter.ResumeLayout(false);
             this.tlsFooter.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numDurationNumber)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -276,11 +333,12 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox txtBars;
-        private System.Windows.Forms.TextBox txtDuration;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox txtExchange;
+        private System.Windows.Forms.ComboBox cboDurationPeriod;
+        private System.Windows.Forms.NumericUpDown numDurationNumber;
+        private System.Windows.Forms.ComboBox cboHistoricBarSize;
     }
 }
 

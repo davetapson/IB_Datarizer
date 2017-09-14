@@ -86,7 +86,7 @@ namespace IB_Datarizer
             // Write this string to the console
             Console.WriteLine(strData);
             // Add this tick price to the form by calling the AddListBoxItem delegate
-            MainForm.AddListBoxItem(strData);
+            MainForm.AddRealTimeListBoxItem(strData);
         }
         //! [tickprice]
         
@@ -98,7 +98,7 @@ namespace IB_Datarizer
             string strData = "Tick Size. Ticker Id:" + tickerId +
                      ", Field: " + field + ", Size: " + size;
             Console.WriteLine(strData);
-            MainForm.AddListBoxItem(strData);
+            MainForm.AddRealTimeListBoxItem(strData);
         }
         //! [ticksize]
         
@@ -106,6 +106,11 @@ namespace IB_Datarizer
         public virtual void tickString(int tickerId, int tickType, string value)
         {
             Console.WriteLine("Tick string. Ticker Id:" + tickerId + ", Type: " + tickType + ", Value: " + value);
+            string strData = "Tick string. Ticker Id:" + tickerId + ", Type: " + tickType + ", Value: " + value;
+            // Write this string to the console
+            Console.WriteLine(strData);
+            // Add this tick price to the form by calling the AddListBoxItem delegate
+            MainForm.AddRealTimeListBoxItem(strData);
         }
         //! [tickstring]
 
@@ -363,6 +368,13 @@ namespace IB_Datarizer
         public virtual void historicalData(int reqId, Bar bar)
         {
             Console.WriteLine("HistoricalData. " + reqId + " - Time: " + bar.Time + ", Open: " + bar.Open + ", High: " + bar.High + ", Low: " + bar.Low + ", Close: " + bar.Close + ", Volume: " + bar.Volume + ", Count: " + bar.Count + ", WAP: " + bar.WAP);
+
+            string strData = "HistoricalData. " + reqId + " - Time: " + bar.Time + ", Open: " + bar.Open + ", High: " + bar.High + ", Low: " + bar.Low + ", Close: " + bar.Close + ", Volume: " + bar.Volume + ", Count: " + bar.Count + ", WAP: " + bar.WAP;
+            // Write this string to the console
+            //Console.WriteLine(strData);
+            // Add this tick price to the form by calling the AddListBoxItem delegate
+            MainForm.AddHistoricalListBoxItem(strData);
+
         }
         //! [historicaldata]
 

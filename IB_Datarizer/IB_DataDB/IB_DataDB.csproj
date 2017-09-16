@@ -46,7 +46,6 @@
   <ItemGroup>
     <Compile Include="Bar.cs" />
     <Compile Include="Bar_Repository.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="BarType.cs" />
     <Compile Include="BarType_Repository.cs" />
     <Compile Include="Config.cs" />

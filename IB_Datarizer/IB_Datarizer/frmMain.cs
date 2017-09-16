@@ -1,4 +1,5 @@
-﻿using IBApi;
+﻿using IB_DataDB;
+using IBApi;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,6 +20,7 @@ namespace IB_Datarizer
         EWrapperImpl ibClient;
         EClientSocket clientSocket;
         EReaderSignal readerSignal;
+        RequestSymbol_Repository requestSymbol_Repository;
 
 
 
@@ -68,7 +70,7 @@ namespace IB_Datarizer
 
         private void frmMain_Load(object sender, EventArgs e)
         {
-
+            requestSymbol_Repository = new RequestSymbol_Repository();
         }
 
         private void btnConnect_Click(object sender, EventArgs e)
@@ -141,7 +143,7 @@ namespace IB_Datarizer
             contract.ConId = 236950077;
 
             // Kick off the subscription for real-time data (add the mktDataOptions list for API v9.71)
-            ibClient.ClientSocket.reqMktData(1, contract, "233", false, false, null);// mktDataOptions);
+            //ibClient.ClientSocket.reqMktData(1, contract, "233", false, false, null);// mktDataOptions);
                                                                                      // For API v9.72 and higher, add one more parameter for regulatory snapshot
                                                                                      // ibClient.ClientSocket.reqMktData(1, contract, "", false, false, mktDataOptions)
 
@@ -152,6 +154,7 @@ namespace IB_Datarizer
             //contract.Exchange = "ECBOT";
             //contract.Currency = "USD";
             //contract.LastTradeDateOrContractMonth = "20170914";
+            ibClient.ClientSocket.reqRealTimeBars(requestSymbol_Repository.GetReqIdForSymbol(txtSymbol.Text), contract, 5, "TRADES", true, null);
 
         }
 
@@ -159,6 +162,7 @@ namespace IB_Datarizer
         {
             // Make the call to cancel the market data subscription
             ibClient.ClientSocket.cancelMktData(1);
+            ibClient.ClientSocket.cancelRealTimeBars(3);
         }
 
         public void SetServerTime(string serverTime)

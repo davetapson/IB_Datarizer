@@ -7,4 +7,10 @@
     <StartupObject />
   </PropertyGroup>
 
+  <ItemGroup>
+    <Reference Include="CSharpAPI">
+      <HintPath>..\..\IB_Client\bin\Debug\CSharpAPI.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

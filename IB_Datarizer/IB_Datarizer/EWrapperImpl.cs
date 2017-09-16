@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using IBApi;
+using IB_DataDB;
 
 
 
@@ -22,6 +23,8 @@ namespace IB_Datarizer
 
         // This will be assigned as the main form once we connect
         public frmMain MainForm;
+        RequestSymbol_Repository requestSymbolRepository = new RequestSymbol_Repository();
+        BarType_Repository barType_Repository = new BarType_Repository();
 
         //! [socket_init]
         public EWrapperImpl()
@@ -365,7 +368,7 @@ namespace IB_Datarizer
         //! [fundamentaldata]
 
         //! [historicaldata]
-        public virtual void historicalData(int reqId, Bar bar)
+        public virtual void historicalData(int reqId, IBApi.Bar bar)
         {
             Console.WriteLine("HistoricalData. " + reqId + " - Time: " + bar.Time + ", Open: " + bar.Open + ", High: " + bar.High + ", Low: " + bar.Low + ", Close: " + bar.Close + ", Volume: " + bar.Volume + ", Count: " + bar.Count + ", WAP: " + bar.WAP);
 
@@ -424,6 +427,22 @@ namespace IB_Datarizer
         public virtual void realtimeBar(int reqId, long time, double open, double high, double low, double close, long volume, double WAP, int count)
         {
             Console.WriteLine("RealTimeBars. " + reqId + " - Time: " + time + ", Open: " + open + ", High: " + high + ", Low: " + low + ", Close: " + close + ", Volume: " + volume + ", Count: " + count + ", WAP: " + WAP);
+
+            string strData = "RealTimeBars. " + reqId + " - Time: " + time + ", Open: " + open + ", High: " + high + ", Low: " + low + ", Close: " + close + ", Volume: " + volume + ", Count: " + count + ", WAP: " + WAP;
+            // Write this string to the console
+            Console.WriteLine(strData);
+            // Add this tick price to the form by calling the AddListBoxItem delegate
+            MainForm.AddRealTimeListBoxItem(strData);
+
+            // save tick to db
+            IB_DataDB.Bar bar = new IB_DataDB.Bar(-1, reqId, Convert.ToInt32(time), DateTime.Now, requestSymbolRepository.GetSymbolForReqId(reqId), barType_Repository.GetIDForBarTypeDesc("5 Sec"), 
+                                                  Convert.ToDecimal(open), Convert.ToDecimal(high), Convert.ToDecimal(low), Convert.ToDecimal(close),
+                                                  Convert.ToInt32(volume), count,Convert.ToInt32(WAP));
+
+            Bar_Repository repository = new Bar_Repository();
+            repository.Save(bar);
+
+
         }
         //! [realtimebar]
 
@@ -702,7 +721,7 @@ namespace IB_Datarizer
         //! [histogramData]
 
         //! [historicalDataUpdate]
-        public void historicalDataUpdate(int reqId, Bar bar)
+        public void historicalDataUpdate(int reqId, IBApi.Bar bar)
         {
             Console.WriteLine("HistoricalDataUpdate. " + reqId + " - Time: " + bar.Time + ", Open: " + bar.Open + ", High: " + bar.High + ", Low: " + bar.Low + ", Close: " + bar.Close + ", Volume: " + bar.Volume + ", Count: " + bar.Count + ", WAP: " + bar.WAP);
         }

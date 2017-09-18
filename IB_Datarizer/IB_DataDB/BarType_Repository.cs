@@ -45,7 +45,7 @@ namespace IB_DataDB
 
         public int GetIDForBarTypeDesc(string desc)
         {
-            BarType barType = barTypes.Find(o => o.Desc.Equals(desc));
+            BarType barType = barTypes.Find(o => o.Desc.Trim().Equals(desc));
 
             return barType.Id;
         }

@@ -49,6 +49,10 @@
             this.cboDurationPeriod = new System.Windows.Forms.ComboBox();
             this.numDurationNumber = new System.Windows.Forms.NumericUpDown();
             this.cboHistoricBarSize = new System.Windows.Forms.ComboBox();
+            this.lstErrors = new System.Windows.Forms.ListBox();
+            this.lstRealTimeBars = new System.Windows.Forms.ListBox();
+            this.btnRealTimeBarsStart = new System.Windows.Forms.Button();
+            this.btRealTimeBarsStop = new System.Windows.Forms.Button();
             this.tlsFooter.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numDurationNumber)).BeginInit();
             this.SuspendLayout();
@@ -106,9 +110,9 @@
             this.lstRealTimeData.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.lstRealTimeData.FormattingEnabled = true;
-            this.lstRealTimeData.Location = new System.Drawing.Point(13, 70);
+            this.lstRealTimeData.Location = new System.Drawing.Point(327, 70);
             this.lstRealTimeData.Name = "lstRealTimeData";
-            this.lstRealTimeData.Size = new System.Drawing.Size(385, 186);
+            this.lstRealTimeData.Size = new System.Drawing.Size(385, 290);
             this.lstRealTimeData.TabIndex = 5;
             // 
             // tlsFooter
@@ -117,9 +121,9 @@
             this.tlsFooter.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tslConnectionStatus,
             this.tslServerTime});
-            this.tlsFooter.Location = new System.Drawing.Point(0, 259);
+            this.tlsFooter.Location = new System.Drawing.Point(0, 504);
             this.tlsFooter.Name = "tlsFooter";
-            this.tlsFooter.Size = new System.Drawing.Size(976, 25);
+            this.tlsFooter.Size = new System.Drawing.Size(1184, 25);
             this.tlsFooter.TabIndex = 6;
             this.tlsFooter.Text = "Footer ToolStrip";
             // 
@@ -140,9 +144,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lstHistoricalData.FormattingEnabled = true;
-            this.lstHistoricalData.Location = new System.Drawing.Point(404, 70);
+            this.lstHistoricalData.Location = new System.Drawing.Point(718, 70);
             this.lstHistoricalData.Name = "lstHistoricalData";
-            this.lstHistoricalData.Size = new System.Drawing.Size(560, 186);
+            this.lstHistoricalData.Size = new System.Drawing.Size(454, 290);
             this.lstHistoricalData.TabIndex = 7;
             // 
             // btnGetHistoricalData
@@ -281,11 +285,50 @@
             this.cboHistoricBarSize.Text = "1 Min";
             this.cboHistoricBarSize.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
+            // lstErrors
+            // 
+            this.lstErrors.FormattingEnabled = true;
+            this.lstErrors.Location = new System.Drawing.Point(15, 366);
+            this.lstErrors.Name = "lstErrors";
+            this.lstErrors.Size = new System.Drawing.Size(949, 134);
+            this.lstErrors.TabIndex = 22;
+            // 
+            // lstRealTimeBars
+            // 
+            this.lstRealTimeBars.FormattingEnabled = true;
+            this.lstRealTimeBars.Location = new System.Drawing.Point(12, 70);
+            this.lstRealTimeBars.Name = "lstRealTimeBars";
+            this.lstRealTimeBars.Size = new System.Drawing.Size(309, 290);
+            this.lstRealTimeBars.TabIndex = 23;
+            // 
+            // btnRealTimeBarsStart
+            // 
+            this.btnRealTimeBarsStart.Location = new System.Drawing.Point(869, 13);
+            this.btnRealTimeBarsStart.Name = "btnRealTimeBarsStart";
+            this.btnRealTimeBarsStart.Size = new System.Drawing.Size(95, 23);
+            this.btnRealTimeBarsStart.TabIndex = 24;
+            this.btnRealTimeBarsStart.Text = "RTBars Start";
+            this.btnRealTimeBarsStart.UseVisualStyleBackColor = true;
+            this.btnRealTimeBarsStart.Click += new System.EventHandler(this.btnRealTimeBarsStart_Click);
+            // 
+            // btRealTimeBarsStop
+            // 
+            this.btRealTimeBarsStop.Location = new System.Drawing.Point(970, 13);
+            this.btRealTimeBarsStop.Name = "btRealTimeBarsStop";
+            this.btRealTimeBarsStop.Size = new System.Drawing.Size(83, 23);
+            this.btRealTimeBarsStop.TabIndex = 25;
+            this.btRealTimeBarsStop.Text = "RTBars Stop";
+            this.btRealTimeBarsStop.UseVisualStyleBackColor = true;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(976, 284);
+            this.ClientSize = new System.Drawing.Size(1184, 529);
+            this.Controls.Add(this.btRealTimeBarsStop);
+            this.Controls.Add(this.btnRealTimeBarsStart);
+            this.Controls.Add(this.lstRealTimeBars);
+            this.Controls.Add(this.lstErrors);
             this.Controls.Add(this.cboHistoricBarSize);
             this.Controls.Add(this.numDurationNumber);
             this.Controls.Add(this.cboDurationPeriod);
@@ -339,6 +382,10 @@
         private System.Windows.Forms.ComboBox cboDurationPeriod;
         private System.Windows.Forms.NumericUpDown numDurationNumber;
         private System.Windows.Forms.ComboBox cboHistoricBarSize;
+        private System.Windows.Forms.ListBox lstErrors;
+        private System.Windows.Forms.ListBox lstRealTimeBars;
+        private System.Windows.Forms.Button btnRealTimeBarsStart;
+        private System.Windows.Forms.Button btRealTimeBarsStop;
     }
 }
 

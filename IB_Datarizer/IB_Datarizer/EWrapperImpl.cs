@@ -57,12 +57,17 @@ namespace IB_Datarizer
         public virtual void error(string str)
         {
             Console.WriteLine("Error: "+str+"\n");
+            MainForm.AddErrorsListBoxItem(str);
         }
         
         //! [error]
         public virtual void error(int id, int errorCode, string errorMsg)
         {
             Console.WriteLine("Error. Id: " + id + ", Code: " + errorCode + ", Msg: " + errorMsg + "\n");
+
+            string errorMessage = "Error. Id: " + id + ", Code: " + errorCode + ", Msg: " + errorMsg + "\n";
+            MainForm.AddErrorsListBoxItem(errorMessage);
+
         }
         //! [error]
 
@@ -84,7 +89,7 @@ namespace IB_Datarizer
             //    ", PastLimit: " + attribs.PastLimit + ", PreOpen: " + attribs.PreOpen);
 
 
-            string strData = "Tick Price. Ticker Id:" + tickerId + ", Field: " + field +
+            string strData = "Tick Time" + DateTime.Now.ToString("yyyyMMddHHmmss fff") + " Tick Price. Ticker Id:" + tickerId + ", Field: " + field +
                       ", Price: " + price + ", CanAutoExecute: " + attribs.CanAutoExecute;
             // Write this string to the console
             Console.WriteLine(strData);
@@ -432,7 +437,7 @@ namespace IB_Datarizer
             // Write this string to the console
             Console.WriteLine(strData);
             // Add this tick price to the form by calling the AddListBoxItem delegate
-            MainForm.AddRealTimeListBoxItem(strData);
+            MainForm.AddRealTimeBarsListBoxItem(strData);
 
             // save tick to db
             IB_DataDB.Bar bar = new IB_DataDB.Bar(-1, reqId, Convert.ToInt32(time), DateTime.Now, requestSymbolRepository.GetSymbolForReqId(reqId), barType_Repository.GetIDForBarTypeDesc("5 Sec"), 

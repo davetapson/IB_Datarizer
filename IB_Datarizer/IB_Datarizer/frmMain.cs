@@ -43,6 +43,21 @@ namespace IB_Datarizer
             }
         }
 
+        public void AddRealTimeBarsListBoxItem(string text)
+        {
+            // See if a new invocation is required form a different thread
+            if (this.lstRealTimeBars.InvokeRequired)
+            {
+                SetTextCallback d = new SetTextCallback(AddRealTimeBarsListBoxItem);
+                this.Invoke(d, new object[] { text });
+            }
+            else
+            {
+                // Add the text string to the list box
+                this.lstRealTimeBars.Items.Add(text);
+            }
+        }
+
         public void AddHistoricalListBoxItem(string text)
         {
             // See if a new invocation is required form a different thread
@@ -55,6 +70,21 @@ namespace IB_Datarizer
             {
                 // Add the text string to the list box
                 this.lstHistoricalData.Items.Add(text);
+            }
+        }
+
+        public void AddErrorsListBoxItem(string text)
+        {
+            // See if a new invocation is required form a different thread
+            if (this.lstErrors.InvokeRequired)
+            {
+                SetTextCallback d = new SetTextCallback(AddErrorsListBoxItem);
+                this.Invoke(d, new object[] { text });
+            }
+            else
+            {
+                // Add the text string to the list box
+                this.lstErrors.Items.Add(text);
             }
         }
 
@@ -123,29 +153,36 @@ namespace IB_Datarizer
 
         private void btnStart_Click(object sender, EventArgs e)
         {
+            int requestId = requestSymbol_Repository.GetReqIdForSymbol(txtSymbol.Text);
+
             // Create a new contract to specify the security we are searching for
             IBApi.Contract contract = new IBApi.Contract();
-            // Create a new TagValueList object (for API version 9.71 and later) 
-            List<IBApi.TagValue> mktDataOptions = new List<IBApi.TagValue>();
+            //       // Create a new TagValueList object (for API version 9.71 and later) 
+                   List<IBApi.TagValue> mktDataOptions = new List<IBApi.TagValue>();
 
-            // Set the underlying stock symbol from the tbSymbol text box
-            contract.Symbol = txtSymbol.Text;
-            // Set the Security type to STK for a Stock
+            //       // Set the underlying stock symbol from the tbSymbol text box
+            ////       contract.Symbol = txtSymbol.Text;
+            //       // Set the Security type to STK for a Stock
+            //       contract.SecType = "FUT";
+            //       // Use "SMART" as the general exchange
+            //       contract.Exchange = txtExchange.Text;
+            //       // Set the primary exchange (sometimes called Listing exchange)
+            //       // Use either NYSE or ISLAND
+            //       //contract.PrimaryExch = "ISLAND";
+            //       // Set the currency to USD
+            //       contract.Currency = "USD";
+
+            //       contract.ConId = 236950077;
+            contract.Symbol = "ES";
             contract.SecType = "FUT";
-            // Use "SMART" as the general exchange
-            contract.Exchange = txtExchange.Text;
-            // Set the primary exchange (sometimes called Listing exchange)
-            // Use either NYSE or ISLAND
-            //contract.PrimaryExch = "ISLAND";
-            // Set the currency to USD
+            contract.Exchange = "GLOBEX";
             contract.Currency = "USD";
-
-            contract.ConId = 236950077;
+            contract.LastTradeDateOrContractMonth = "20171215"; //15/12/2017
 
             // Kick off the subscription for real-time data (add the mktDataOptions list for API v9.71)
             //ibClient.ClientSocket.reqMktData(1, contract, "233", false, false, null);// mktDataOptions);
-                                                                                     // For API v9.72 and higher, add one more parameter for regulatory snapshot
-                                                                                     // ibClient.ClientSocket.reqMktData(1, contract, "", false, false, mktDataOptions)
+            // For API v9.72 and higher, add one more parameter for regulatory snapshot
+            ibClient.ClientSocket.reqMktData(/*requestId*/ 5, contract, "", false, false, mktDataOptions);
 
             //! [futcontract]
             //Contract contract = new Contract();
@@ -154,15 +191,17 @@ namespace IB_Datarizer
             //contract.Exchange = "ECBOT";
             //contract.Currency = "USD";
             //contract.LastTradeDateOrContractMonth = "20170914";
-            ibClient.ClientSocket.reqRealTimeBars(requestSymbol_Repository.GetReqIdForSymbol(txtSymbol.Text), contract, 5, "TRADES", true, null);
+            
+            //ibClient.ClientSocket.reqRealTimeBars(requestId, contract, 5, "TRADES", true, null);
 
         }
 
         private void btnStop_Click(object sender, EventArgs e)
         {
             // Make the call to cancel the market data subscription
-            ibClient.ClientSocket.cancelMktData(1);
-            ibClient.ClientSocket.cancelRealTimeBars(3);
+            ibClient.ClientSocket.cancelMktData(5);
+            int requestId = requestSymbol_Repository.GetReqIdForSymbol(txtSymbol.Text);
+            ibClient.ClientSocket.cancelRealTimeBars(requestId);
         }
 
         public void SetServerTime(string serverTime)
@@ -191,24 +230,30 @@ namespace IB_Datarizer
             // Create a new TagValueList object (for API version 9.71)
             List<IBApi.TagValue> mktDataOptions = new List<IBApi.TagValue>();
 
-            // Now fill the ContractInfo object with the necessary information 
-            // Contract identifier
-            contract.ConId = 0;
-            // Stock symbol
-            contract.Symbol = txtSymbol.Text;
-            // Type of instrument: Stock=STK,Option=OPT,Future=FUT, etc.
+            //// Now fill the ContractInfo object with the necessary information 
+            //// Contract identifier
+            //contract.ConId = 0;
+            //// Stock symbol
+            //contract.Symbol = txtSymbol.Text;
+            //// Type of instrument: Stock=STK,Option=OPT,Future=FUT, etc.
+            //contract.SecType = "FUT";
+            //// The destination of order or request. "SMART" =IB order router
+            //contract.Exchange = txtExchange.Text;
+            //// The primary exchange where the instrument trades. 
+            //// NYSE, NASDAQ, AMEX, BATS, ARCA, PHLX etc.
+            ////contract.PrimaryExch = "NASDAQ";
+            //// The currency of the exchange USD or GBP or CAD or EUR, etc.
+            //contract.Currency = "USD";
+            //// Now call reqHistoricalDataEx with parameters:
+            //// tickerId, Contract, endDateTime, durationStr, barSize, WhatToShow, 
+            //// useRTH, formatDate
+            //contract.ConId = 236950077;
+
+            contract.Symbol = "ES";
             contract.SecType = "FUT";
-            // The destination of order or request. "SMART" =IB order router
-            contract.Exchange = txtExchange.Text;
-            // The primary exchange where the instrument trades. 
-            // NYSE, NASDAQ, AMEX, BATS, ARCA, PHLX etc.
-            //contract.PrimaryExch = "NASDAQ";
-            // The currency of the exchange USD or GBP or CAD or EUR, etc.
+            contract.Exchange = "GLOBEX";
             contract.Currency = "USD";
-            // Now call reqHistoricalDataEx with parameters:
-            // tickerId, Contract, endDateTime, durationStr, barSize, WhatToShow, 
-            // useRTH, formatDate
-            contract.ConId = 236950077;
+            contract.LastTradeDateOrContractMonth = "20171215"; //15/12/2017
 
             ibClient.ClientSocket.reqHistoricalData(1, contract,
                  dtpEndDateTime.Value.ToString("yyyyMMdd HH:mm:ss" ),
@@ -224,6 +269,51 @@ namespace IB_Datarizer
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnRealTimeBarsStart_Click(object sender, EventArgs e)
+        {
+            int requestId = requestSymbol_Repository.GetReqIdForSymbol(txtSymbol.Text);
+
+            // Create a new contract to specify the security we are searching for
+            IBApi.Contract contract = new IBApi.Contract();
+            // Create a new TagValueList object (for API version 9.71 and later) 
+     //       List<IBApi.TagValue> mktDataOptions = new List<IBApi.TagValue>();
+
+            // Set the underlying stock symbol from the tbSymbol text box
+            //       contract.Symbol = txtSymbol.Text;
+            // Set the Security type to STK for a Stock
+    //        contract.SecType = "FUT";
+            // Use "SMART" as the general exchange
+    //        contract.Exchange = txtExchange.Text;
+            // Set the primary exchange (sometimes called Listing exchange)
+            // Use either NYSE or ISLAND
+            //contract.PrimaryExch = "ISLAND";
+            // Set the currency to USD
+   //         contract.Currency = "USD";
+
+    //        contract.ConId = 236950077;
+
+            // Kick off the subscription for real-time data (add the mktDataOptions list for API v9.71)
+            //ibClient.ClientSocket.reqMktData(1, contract, "233", false, false, null);// mktDataOptions);
+            // For API v9.72 and higher, add one more parameter for regulatory snapshot
+    //        ibClient.ClientSocket.reqMktData(/*requestId*/ 5, contract, "", false, false, mktDataOptions);
+
+            //! [futcontract]
+            //Contract contract = new Contract();
+            //contract.Symbol = "ZC";
+            //contract.SecType = "FUT";
+            //contract.Exchange = "ECBOT";
+            //contract.Currency = "USD";
+            //contract.LastTradeDateOrContractMonth = "20170914";
+
+            contract.Symbol = "ES";
+            contract.SecType = "FUT";
+            contract.Exchange = "GLOBEX";
+            contract.Currency = "USD";
+            contract.LastTradeDateOrContractMonth = "20171215"; //15/12/2017
+
+            ibClient.ClientSocket.reqRealTimeBars(1, contract, 5, "TRADES", true, null);
         }
     }
 }

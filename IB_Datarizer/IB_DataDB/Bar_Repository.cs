@@ -8,15 +8,13 @@ namespace IB_DataDB
     {
         public int Save(Bar bar)
         {
-            int result = -1;
-
             using (SqlConnection connection = new SqlConnection(Config.ConnectionString))
             {
                 SqlCommand cmd = new SqlCommand("Bar_Insert", connection);
                 cmd.CommandType = CommandType.StoredProcedure;
-                //cmd.Parameters.AddWithValue("ReqId", bar.ReqId);
+                cmd.Parameters.AddWithValue("ReqId", bar.ReqId);
                 cmd.Parameters.AddWithValue("Time", bar.Time);
-                //cmd.Parameters.AddWithValue("DateStamp", bar.DateStamp);
+                cmd.Parameters.AddWithValue("DateStamp", bar.DateStamp);
                 cmd.Parameters.AddWithValue("Symbol", bar.Symbol);
                 cmd.Parameters.AddWithValue("BarTypeId", bar.BarTypeId);
                 cmd.Parameters.AddWithValue("Open", bar.Open);
@@ -28,7 +26,7 @@ namespace IB_DataDB
                 cmd.Parameters.AddWithValue("WAP", bar.WAP);
 
                 connection.Open();
-                result = (int)cmd.ExecuteScalar();
+                int result = Convert.ToInt32(cmd.ExecuteScalar());
                 connection.Close();
 
                 if (result == 0) throw new Exception("Could not insert bar:" + bar.ToString());

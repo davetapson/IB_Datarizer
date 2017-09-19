@@ -24,6 +24,7 @@ namespace IB_Datarizer
         // This will be assigned as the main form once we connect
         public frmMain MainForm;
         RequestSymbol_Repository requestSymbolRepository = new RequestSymbol_Repository();
+        Bar_Repository barRepository = new Bar_Repository();
         BarType_Repository barType_Repository = new BarType_Repository();
 
         //! [socket_init]
@@ -444,8 +445,8 @@ namespace IB_Datarizer
                                                   Convert.ToDecimal(open), Convert.ToDecimal(high), Convert.ToDecimal(low), Convert.ToDecimal(close),
                                                   Convert.ToInt32(volume), count,Convert.ToInt32(WAP));
 
-            Bar_Repository repository = new Bar_Repository();
-            repository.Save(bar);
+            
+            barRepository.Save(bar);
 
 
         }

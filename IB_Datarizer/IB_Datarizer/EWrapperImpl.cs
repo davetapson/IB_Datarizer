@@ -23,9 +23,11 @@ namespace IB_Datarizer
 
         // This will be assigned as the main form once we connect
         public frmMain MainForm;
-        RequestSymbol_Repository requestSymbolRepository = new RequestSymbol_Repository();
-        Bar_Repository barRepository = new Bar_Repository();
+
+        RequestSymbolRepository requestSymbolRepository = new RequestSymbolRepository();
+        BarRepository barRepository = new BarRepository();
         BarType_Repository barType_Repository = new BarType_Repository();
+        TickRepository tickRepository = new TickRepository();
 
         //! [socket_init]
         public EWrapperImpl()
@@ -89,44 +91,84 @@ namespace IB_Datarizer
             //Console.WriteLine("Tick Price. Ticker Id:"+tickerId+", Field: "+field+", Price: "+price+", CanAutoExecute: "+attribs.CanAutoExecute + 
             //    ", PastLimit: " + attribs.PastLimit + ", PreOpen: " + attribs.PreOpen);
 
+            DateTime time = DateTime.Now;
 
-            string strData = "Tick Time" + DateTime.Now.ToString("yyyyMMddHHmmss fff") + " Tick Price. Ticker Id:" + tickerId + ", Field: " + field +
+            string strData = "Tick Time" + time + " Tick Price. Ticker Id:" + tickerId + ", Field: " + field +
                       ", Price: " + price + ", CanAutoExecute: " + attribs.CanAutoExecute;
             // Write this string to the console
             Console.WriteLine(strData);
             // Add this tick price to the form by calling the AddListBoxItem delegate
             MainForm.AddRealTimeListBoxItem(strData);
+
+            Tick tick = new Tick();
+            tick.TickTime = time;
+            tick.TickerId = tickerId;
+            tick.Field = field;
+            tick.Price = price;
+            tick.Attribs = attribs;
+
+            tickRepository.Save(tick);
+
         }
         //! [tickprice]
         
         //! [ticksize]
         public virtual void tickSize(int tickerId, int field, int size)
         {
+            DateTime time = DateTime.Now;
             //Console.WriteLine("Tick Size. Ticker Id:" + tickerId + ", Field: " + field + ", Size: " + size);
 
             string strData = "Tick Size. Ticker Id:" + tickerId +
                      ", Field: " + field + ", Size: " + size;
             Console.WriteLine(strData);
             MainForm.AddRealTimeListBoxItem(strData);
+
+            TickSize tickSize = new TickSize();
+            tickSize.TickTime = time;
+            tickSize.TickerId = tickerId;
+            tickSize.Field = field;
+            tickSize.Size = size;
+
+            tickRepository.Save(tickSize);
         }
         //! [ticksize]
         
         //! [tickstring]
         public virtual void tickString(int tickerId, int tickType, string value)
         {
+            DateTime time = DateTime.Now;
+
             Console.WriteLine("Tick string. Ticker Id:" + tickerId + ", Type: " + tickType + ", Value: " + value);
             string strData = "Tick string. Ticker Id:" + tickerId + ", Type: " + tickType + ", Value: " + value;
             // Write this string to the console
             Console.WriteLine(strData);
             // Add this tick price to the form by calling the AddListBoxItem delegate
             MainForm.AddRealTimeListBoxItem(strData);
+
+            TickString tickString = new TickString();
+            tickString.TickerId = tickerId;
+            tickString.TickTime = time;
+            tickString.TickType = tickType;
+            tickString.Value = value;
+
+            tickRepository.Save(tickString);
         }
         //! [tickstring]
 
         //! [tickgeneric]
         public virtual void tickGeneric(int tickerId, int field, double value)
         {
+            DateTime time = DateTime.Now;
+
             Console.WriteLine("Tick Generic. Ticker Id:" + tickerId + ", Field: " + field + ", Value: " + value);
+
+            TickGeneric tickGeneric = new TickGeneric();
+            tickGeneric.TickerId = tickerId;
+            tickGeneric.TickTime = time;
+            tickGeneric.Field = field;
+            tickGeneric.Value = value;
+
+            tickRepository.Save(tickGeneric);
         }
         //! [tickgeneric]
 
@@ -434,21 +476,22 @@ namespace IB_Datarizer
         {
             Console.WriteLine("RealTimeBars. " + reqId + " - Time: " + time + ", Open: " + open + ", High: " + high + ", Low: " + low + ", Close: " + close + ", Volume: " + volume + ", Count: " + count + ", WAP: " + WAP);
 
-            string strData = "RealTimeBars. " + reqId + " - Time: " + time + ", Open: " + open + ", High: " + high + ", Low: " + low + ", Close: " + close + ", Volume: " + volume + ", Count: " + count + ", WAP: " + WAP;
+            string strData = "RealTimeBars. " + reqId + " - Time: " + DataUtils.ReturnUTCDateTimeForUTCUnixEpochTime(time) + ", Open: " + open + ", High: " + high + ", Low: " + low + ", Close: " + close + ", Volume: " + volume + ", Count: " + count + ", WAP: " + WAP;
             // Write this string to the console
             Console.WriteLine(strData);
             // Add this tick price to the form by calling the AddListBoxItem delegate
             MainForm.AddRealTimeBarsListBoxItem(strData);
 
+
             // save tick to db
-            IB_DataDB.Bar bar = new IB_DataDB.Bar(-1, reqId, Convert.ToInt32(time), DateTime.Now, requestSymbolRepository.GetSymbolForReqId(reqId), barType_Repository.GetIDForBarTypeDesc("5 Sec"), 
+            IB_DataDB.Bar bar = new IB_DataDB.Bar(-1, reqId, DataUtils.ReturnUTCDateTimeForUTCUnixEpochTime(time), DateTime.Now, requestSymbolRepository.GetSymbolForReqId(reqId), barType_Repository.GetIDForBarTypeDesc("5 Sec"), 
                                                   Convert.ToDecimal(open), Convert.ToDecimal(high), Convert.ToDecimal(low), Convert.ToDecimal(close),
                                                   Convert.ToInt32(volume), count,Convert.ToInt32(WAP));
 
             
             barRepository.Save(bar);
 
-
+            barRepository.MakeBars(BarSize.FiveMin, bar);
         }
         //! [realtimebar]
 
@@ -665,9 +708,20 @@ namespace IB_Datarizer
         //! [tickReqParams]
         public void tickReqParams(int tickerId, double minTick, string bboExchange, int snapshotPermissions)
         {
+            DateTime time = DateTime.Now;
+
             Console.WriteLine("id={0} minTick = {1} bboExchange = {2} snapshotPermissions = {3}", tickerId, minTick, bboExchange, snapshotPermissions);
 
             BboExchange = bboExchange;
+
+            TickReqParams tickReqParams = new TickReqParams();
+            tickReqParams.TickerId = tickerId;
+            tickReqParams.TickTime = time;
+            tickReqParams.MinTick = minTick;
+            tickReqParams.BBOExchange = bboExchange;
+            tickReqParams.SnapshotPermissions = snapshotPermissions;
+
+            tickRepository.Save(tickReqParams);
         }
         //! [tickReqParams]
 

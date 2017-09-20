@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace IB_DataDB
 {
-    public class RequestSymbol_Repository
+    public class RequestSymbolRepository
     {
 
         private List<RequestSymbol> requestSymbols;
 
-        public RequestSymbol_Repository()
+        public RequestSymbolRepository()
         {
             requestSymbols = GetAll();
         }

@@ -43,9 +43,10 @@ namespace IB_DataDB
         ASK
     }
 
-    public class TickPrice
+    public class Tick
     {
         public int TickerId { get; set; }
+        public DateTime TickTime { get; set; }
         public int Field { get; set; }
         public double Price { get; set; }
         public IBApi.TickAttrib Attribs { get; set; }
@@ -54,6 +55,7 @@ namespace IB_DataDB
     public class TickSize
     {
         public int TickerId { get; set; }
+        public DateTime TickTime { get; set; }
         public int Field { get; set; }
         public int Size { get; set; }
     }
@@ -61,13 +63,15 @@ namespace IB_DataDB
     public class TickString
     {
         public int TickerId { get; set; }
-        public int tickType { get; set; }
+        public DateTime TickTime { get; set; }
+        public int TickType { get; set; }
         public string Value { get; set; }
     }
 
     public class TickGeneric
     {
         public int TickerId { get; set; }
+        public DateTime TickTime { get; set; }
         public int Field { get; set; }
         public double Value { get; set; }
     }
@@ -75,6 +79,7 @@ namespace IB_DataDB
     public class TickReqParams
     {
         public int TickerId { get; set; }
+        public DateTime TickTime { get; set; }
         public double MinTick { get; set; }
         public string BBOExchange { get; set; }
         public int SnapshotPermissions { get; set; }

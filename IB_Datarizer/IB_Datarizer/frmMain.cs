@@ -20,7 +20,7 @@ namespace IB_Datarizer
         EWrapperImpl ibClient;
         EClientSocket clientSocket;
         EReaderSignal readerSignal;
-        RequestSymbol_Repository requestSymbol_Repository;
+        RequestSymbolRepository requestSymbol_Repository;
 
 
 
@@ -100,11 +100,14 @@ namespace IB_Datarizer
 
         private void frmMain_Load(object sender, EventArgs e)
         {
-            requestSymbol_Repository = new RequestSymbol_Repository();
+            requestSymbol_Repository = new RequestSymbolRepository();
         }
 
         private void btnConnect_Click(object sender, EventArgs e)
         {
+            // Set up the form object in the EWrapper
+            ibClient.MainForm = (frmMain)Application.OpenForms[0];
+
             // Connect to the IB Server through TWS. Parameters are:
             // host       - Host name or IP address of the host running TWS
             // port       - The port TWS listens through for connections
@@ -139,8 +142,7 @@ namespace IB_Datarizer
 
             tslConnectionStatus.Text = "Connected";
 
-            // Set up the form object in the EWrapper
-            ibClient.MainForm = (frmMain)Application.OpenForms[0];
+            
         }
 
         private void btnDisconnect_Click(object sender, EventArgs e)

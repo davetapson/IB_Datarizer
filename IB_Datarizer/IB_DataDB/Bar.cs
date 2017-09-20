@@ -2,15 +2,18 @@
 
 namespace IB_DataDB
 {
+    public enum BarSize { FiveMin }
     public class Bar
     {
-        public Bar(int id, int reqId, int time, DateTime dateStamp, string symbol,
+        public Bar() { }
+
+        public Bar(int id, int reqId, DateTime barTimeUTC, DateTime dateStamp, string symbol,
             int barTypeId, decimal open, decimal high, decimal low, decimal close,
             int vol, int count, int wap)
         {
             Id = id;
             ReqId = reqId;
-            Time = time;
+            BarTimeUTC = barTimeUTC;
             DateStamp = dateStamp;
             Symbol = symbol;
             BarTypeId = barTypeId;
@@ -25,7 +28,7 @@ namespace IB_DataDB
 
         public int Id { get;  set; }
         public int ReqId { get; set; }
-        public int Time { get; set; }
+        public DateTime BarTimeUTC { get; set; }
         public DateTime DateStamp { get; set; }
         public string Symbol { get; set; }
         public int BarTypeId { get; set; }

@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IB_Datarizer", "IB_Datarize
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IB_DataDB", "IB_DataDB\IB_DataDB.csproj", "{1631D0B6-8CA9-4CDE-B5EC-E9BFFD2F9AC6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigFileReader", "ConfigFileReader\ConfigFileReader.csproj", "{F84292DF-4100-4F60-89AB-B5A8DC128B67}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigFileReaderTest", "UnitTestConfigFileReader\ConfigFileReaderTest.csproj", "{D82A42DE-3591-47C0-9B09-CB0B6972405E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{1631D0B6-8CA9-4CDE-B5EC-E9BFFD2F9AC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1631D0B6-8CA9-4CDE-B5EC-E9BFFD2F9AC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1631D0B6-8CA9-4CDE-B5EC-E9BFFD2F9AC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F84292DF-4100-4F60-89AB-B5A8DC128B67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F84292DF-4100-4F60-89AB-B5A8DC128B67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F84292DF-4100-4F60-89AB-B5A8DC128B67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F84292DF-4100-4F60-89AB-B5A8DC128B67}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D82A42DE-3591-47C0-9B09-CB0B6972405E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D82A42DE-3591-47C0-9B09-CB0B6972405E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D82A42DE-3591-47C0-9B09-CB0B6972405E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D82A42DE-3591-47C0-9B09-CB0B6972405E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

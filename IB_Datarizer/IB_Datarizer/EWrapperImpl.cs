@@ -6,14 +6,15 @@ using System.Linq;
 using System.Text;
 using IBApi;
 using IB_DataDB;
-
-
+using NLog;
 
 namespace IB_Datarizer
 {
     //! [ewrapperimpl]
     public class EWrapperImpl : EWrapper 
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
     //! [ewrapperimpl]
         private int nextOrderId;
         //! [socket_declare]
@@ -53,26 +54,26 @@ namespace IB_Datarizer
 
         public virtual void error(Exception e)
         {
-            Console.WriteLine("Exception thrown: "+e);
+            string str = DateTime.UtcNow + " " + e.Message;
+            MainForm.AddErrorsListBoxItem(str);
+            logger.Error(str);
+            logger.Error(str, e, null); // previous log in case this fails
             throw e;
         }
         
         public virtual void error(string str)
         {
-            Console.WriteLine("Error: "+str+"\n");
+            logger.Error(str);
             MainForm.AddErrorsListBoxItem(str);
         }
         
-        //! [error]
         public virtual void error(int id, int errorCode, string errorMsg)
         {
-            Console.WriteLine("Error. Id: " + id + ", Code: " + errorCode + ", Msg: " + errorMsg + "\n");
-
             string errorMessage = "Error. Id: " + id + ", Code: " + errorCode + ", Msg: " + errorMsg + "\n";
-            MainForm.AddErrorsListBoxItem(errorMessage);
+            logger.Error(errorMessage);
 
+            MainForm.AddErrorsListBoxItem(errorMessage);
         }
-        //! [error]
 
         public virtual void connectionClosed()
         {
@@ -85,92 +86,107 @@ namespace IB_Datarizer
             
         }
 
-        //! [tickprice]
         public virtual void tickPrice(int tickerId, int field, double price, TickAttrib attribs) 
         {
-            //Console.WriteLine("Tick Price. Ticker Id:"+tickerId+", Field: "+field+", Price: "+price+", CanAutoExecute: "+attribs.CanAutoExecute + 
-            //    ", PastLimit: " + attribs.PastLimit + ", PreOpen: " + attribs.PreOpen);
+            try
+            {
+                DateTime time = DateTime.Now;
 
-            DateTime time = DateTime.Now;
+                string strData = "Tick Time" + time + " Tick Price. Ticker Id:" + tickerId + ", Field: " + field +
+                          ", Price: " + price + ", CanAutoExecute: " + attribs.CanAutoExecute;
 
-            string strData = "Tick Time" + time + " Tick Price. Ticker Id:" + tickerId + ", Field: " + field +
-                      ", Price: " + price + ", CanAutoExecute: " + attribs.CanAutoExecute;
-            // Write this string to the console
-            Console.WriteLine(strData);
-            // Add this tick price to the form by calling the AddListBoxItem delegate
-            MainForm.AddRealTimeListBoxItem(strData);
+                MainForm.AddRealTimeListBoxItem(strData);
 
-            Tick tick = new Tick();
-            tick.TickTime = time;
-            tick.TickerId = tickerId;
-            tick.Field = field;
-            tick.Price = price;
-            tick.Attribs = attribs;
+                Tick tick = new Tick();
+                tick.TickTime = time;
+                tick.TickerId = tickerId;
+                tick.Field = field;
+                tick.Price = price;
+                tick.Attribs = attribs;
 
-            tickRepository.Save(tick);
-
+                tickRepository.Save(tick);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+                logger.Trace(e.StackTrace);
+            }
         }
-        //! [tickprice]
-        
-        //! [ticksize]
+
         public virtual void tickSize(int tickerId, int field, int size)
         {
-            DateTime time = DateTime.Now;
-            //Console.WriteLine("Tick Size. Ticker Id:" + tickerId + ", Field: " + field + ", Size: " + size);
+            try
+            {
+                DateTime time = DateTime.Now;
 
-            string strData = "Tick Size. Ticker Id:" + tickerId +
-                     ", Field: " + field + ", Size: " + size;
-            Console.WriteLine(strData);
-            MainForm.AddRealTimeListBoxItem(strData);
+                string strData = "Tick Size. Ticker Id:" + tickerId +
+                         ", Field: " + field + ", Size: " + size;
+                Console.WriteLine(strData);
+                MainForm.AddRealTimeListBoxItem(strData);
 
-            TickSize tickSize = new TickSize();
-            tickSize.TickTime = time;
-            tickSize.TickerId = tickerId;
-            tickSize.Field = field;
-            tickSize.Size = size;
+                TickSize tickSize = new TickSize();
+                tickSize.TickTime = time;
+                tickSize.TickerId = tickerId;
+                tickSize.Field = field;
+                tickSize.Size = size;
 
-            tickRepository.Save(tickSize);
+                tickRepository.Save(tickSize);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+                logger.Trace(e.StackTrace);
+            }
         }
-        //! [ticksize]
         
-        //! [tickstring]
         public virtual void tickString(int tickerId, int tickType, string value)
         {
-            DateTime time = DateTime.Now;
+            try
+            {
+                DateTime time = DateTime.Now;
 
-            Console.WriteLine("Tick string. Ticker Id:" + tickerId + ", Type: " + tickType + ", Value: " + value);
-            string strData = "Tick string. Ticker Id:" + tickerId + ", Type: " + tickType + ", Value: " + value;
-            // Write this string to the console
-            Console.WriteLine(strData);
-            // Add this tick price to the form by calling the AddListBoxItem delegate
-            MainForm.AddRealTimeListBoxItem(strData);
+                string strData = "Tick string. Ticker Id:" + tickerId + ", Type: " + tickType + ", Value: " + value;
 
-            TickString tickString = new TickString();
-            tickString.TickerId = tickerId;
-            tickString.TickTime = time;
-            tickString.TickType = tickType;
-            tickString.Value = value;
+                MainForm.AddRealTimeListBoxItem(strData);
 
-            tickRepository.Save(tickString);
+                TickString tickString = new TickString();
+                tickString.TickerId = tickerId;
+                tickString.TickTime = time;
+                tickString.TickType = tickType;
+                tickString.Value = value;
+
+                tickRepository.Save(tickString);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+                logger.Trace(e.StackTrace);
+            }
         }
-        //! [tickstring]
 
-        //! [tickgeneric]
+
         public virtual void tickGeneric(int tickerId, int field, double value)
         {
-            DateTime time = DateTime.Now;
+            try
+            {
+                DateTime time = DateTime.Now;
 
-            Console.WriteLine("Tick Generic. Ticker Id:" + tickerId + ", Field: " + field + ", Value: " + value);
+                Console.WriteLine("Tick Generic. Ticker Id:" + tickerId + ", Field: " + field + ", Value: " + value);
 
-            TickGeneric tickGeneric = new TickGeneric();
-            tickGeneric.TickerId = tickerId;
-            tickGeneric.TickTime = time;
-            tickGeneric.Field = field;
-            tickGeneric.Value = value;
+                TickGeneric tickGeneric = new TickGeneric();
+                tickGeneric.TickerId = tickerId;
+                tickGeneric.TickTime = time;
+                tickGeneric.Field = field;
+                tickGeneric.Value = value;
 
-            tickRepository.Save(tickGeneric);
+                tickRepository.Save(tickGeneric);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+                logger.Trace(e.StackTrace);
+            }
         }
-        //! [tickgeneric]
 
         public virtual void tickEFP(int tickerId, int tickType, double basisPoints, string formattedBasisPoints, double impliedFuture, int holdDays, string futureLastTradeDate, double dividendImpact, double dividendsToLastTradeDate)
         {

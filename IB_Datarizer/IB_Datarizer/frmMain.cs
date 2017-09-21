@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using NLog;
 
 namespace IB_Datarizer
 {
@@ -21,6 +22,7 @@ namespace IB_Datarizer
         EClientSocket clientSocket;
         EReaderSignal readerSignal;
         RequestSymbolRepository requestSymbol_Repository;
+        private static Logger logger;
 
 
 
@@ -91,7 +93,7 @@ namespace IB_Datarizer
         public frmMain()
         {
             InitializeComponent();
-
+            
             // Instantiate ibClient
             ibClient = new EWrapperImpl();
              clientSocket = ibClient.ClientSocket;
@@ -100,6 +102,9 @@ namespace IB_Datarizer
 
         private void frmMain_Load(object sender, EventArgs e)
         {
+            logger = LogManager.GetCurrentClassLogger();
+            logger.Info("App Started.");
+
             requestSymbol_Repository = new RequestSymbolRepository();
         }
 

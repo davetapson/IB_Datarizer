@@ -61,6 +61,8 @@ namespace IB_DataDB
                     fiveMinBar.High = fiveMinBars.Max(t => t.High);
                     fiveMinBar.Low = fiveMinBars.Min(t => t.Low);
                     fiveMinBar.Close = fiveMinBars[fiveMinBars.Count - 1].Close;
+                    fiveMinBar.Vol = fiveMinBars.Sum((t => t.Vol));
+                    fiveMinBar.Count = fiveMinBars.Sum(t => t.Count);
 
                     Save(fiveMinBar);
 

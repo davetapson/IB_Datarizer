@@ -11,6 +11,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using NLog;
+using ConfigFileReader;
+using System.IO;
 
 namespace IB_Datarizer
 {
@@ -22,6 +24,10 @@ namespace IB_Datarizer
         EClientSocket clientSocket;
         EReaderSignal readerSignal;
         RequestSymbolRepository requestSymbol_Repository;
+
+        string configFile = "C:\\IB_Datarizer\\config\\IB_Datarizer.config";
+        List<ConfigSetting> configSettings;
+
         private static Logger logger;
 
 
@@ -104,8 +110,32 @@ namespace IB_Datarizer
         {
             logger = LogManager.GetCurrentClassLogger();
             logger.Info("App Started.");
+            configSettings = GetConfigSettings(configFile);
+            SetConfigSettings(configSettings);
 
             requestSymbol_Repository = new RequestSymbolRepository();
+
+        }
+
+        private void SetConfigSettings(List<ConfigSetting> configSettings)
+        {
+            txtSymbol.Text = configSettings.Find(x => x.Key == "Symbol").Value;
+            txtExchange.Text = configSettings.Find(x => x.Key == "Exchange").Value;
+            cboDurationPeriod.Text = configSettings.Find(x => x.Key == "DurationPeriod").Value;
+            numDurationNumber.Value = Convert.ToDecimal(configSettings.Find(x => x.Key == "DurationNumber").Value);
+            cboHistoricBarSize.Text = configSettings.Find(x => x.Key == "BarSize").Value;
+            dtpEndDateTime.Value = Convert.ToDateTime( configSettings.Find(x => x.Key == "EndDateTime").Value);
+        }
+
+        private List<ConfigSetting> GetConfigSettings(string configFile)
+        {
+            // ensure directory/file exists
+            Directory.CreateDirectory(Path.GetDirectoryName(configFile));
+            if (!File.Exists(configFile)) { File.WriteAllText(configFile, ""); }
+
+            // get config fle
+            ConfigFile cf = new ConfigFile(configFile);
+            return cf.ConfigSettings;
         }
 
         private void btnConnect_Click(object sender, EventArgs e)

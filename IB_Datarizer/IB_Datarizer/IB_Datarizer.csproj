@@ -96,6 +96,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ConfigFileReader\ConfigFileReader.csproj">
+      <Project>{f84292df-4100-4f60-89ab-b5a8dc128b67}</Project>
+      <Name>ConfigFileReader</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IB_DataDB\IB_DataDB.csproj">
       <Project>{1631d0b6-8ca9-4cde-b5ec-e9bffd2f9ac6}</Project>
       <Name>IB_DataDB</Name>
